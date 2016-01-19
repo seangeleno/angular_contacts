@@ -21,6 +21,24 @@ angular.module('myContacts.contacts', ['ngRoute', 'firebase'])
   $scope.showAddForm = function(){
     $scope.addFormShow = true;
   }
+  //show Edit Form
+  $scope.showEditForm = function(contact){
+    $scope.editFormShow = true;
+
+    //pass in current values
+    $scope.id             = contact.$id;
+    $scope.name           = contact.name;
+    $scope.email          = contact.email;
+    $scope.company        = contact.company;
+    $scope.mobile_phone   = contact.phones[0].home;
+    $scope.home_phone     = contact.phones[0].mobile;
+    $scope.work_phone     = contact.phones[0].work;
+    $scope.street_address = contact.address[0].street_address;
+    $scope.city           = contact.address[0].city;
+    $scope.state          = contact.address[0].state;
+    $scope.zipcode        = contact.address[0].zipcode;
+
+  }
   //hide form
   $scope.hide = function(){
     $scope.addFormShow = false;
@@ -79,16 +97,56 @@ angular.module('myContacts.contacts', ['ngRoute', 'firebase'])
     });
   }
 
+  //Edit contact
+    $scope.editFormSubmit = function (){
+    console.log('Updating Contact...');
+
+    //Get ID
+    var id = $scope.id;
+
+    // Get Record
+    var record = $scope.contacts.$getRecord(id);
+
+    // Assing values
+    record.name = $scope.name;
+    record.email = $scope.email;
+    record.company = $scope.company;
+
+    record.phones[0].work = $scope.work_phone;
+    record.phones[0].home = $scope.home_phone;
+    record.phones[0].mobile = $scope.mobile_phone;
+
+    record.address[0].street_address = $scope.street_address;
+    record.address[0].city = $scope.city;
+    record.address[0].state = $scope.state;
+    record.address[0].zipcode = $scope.zipcode;
+
+    //Save Contact - pass in firebase ref
+    $scope.contacts.$save(record).then(function(ref){
+      console.log(ref.key);
+    });
+
+    clearFields();
+
+    //Hide Edit Form
+    $scope.editFormShow = false;
+
+    $scope.msg = "Contact Updated";
+  }
+
   //Show Contact
   $scope.showContact = function (contact) {
     console.log('Getting Contact...');
-//have to grab first item in array [0]
+
     $scope.name           = contact.name;
     $scope.email          = contact.email;
     $scope.company        = contact.company;
+    //have to grab first item in array [0]
+    //phones
     $scope.mobile_phone   = contact.phones[0].home;
     $scope.home_phone     = contact.phones[0].mobile;
     $scope.work_phone     = contact.phones[0].work;;
+    //address
     $scope.street_address = contact.address[0].street_address;
     $scope.city           = contact.address[0].city;
     $scope.state          = contact.address[0].state;
@@ -113,4 +171,6 @@ angular.module('myContacts.contacts', ['ngRoute', 'firebase'])
     $scope.state = '';
     $scope.zipcode = '';
   }
+
+
 }]);
