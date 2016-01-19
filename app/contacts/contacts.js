@@ -155,6 +155,14 @@ angular.module('myContacts.contacts', ['ngRoute', 'firebase'])
     $scope.contactShow = true;
   }
 
+  $scope.removeContact = function (contact){
+    console.log("Removing contact....beep....booooop.......pssst...crrrk..beep");
+
+    $scope.contacts.$remove(contact);
+
+    $scope.msg = "Contact Removed Successfully"
+  }
+
   //Clear $scope Fields
 
   function clearFields(){
