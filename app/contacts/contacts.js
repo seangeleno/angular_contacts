@@ -78,6 +78,24 @@ angular.module('myContacts.contacts', ['ngRoute', 'firebase'])
     });
   }
 
+  //Show Contact
+  $scope.showContact = function (contact) {
+    console.log('Getting Contact...');
+//have to grab first item in array [0]
+    $scope.name           = contact.name;
+    $scope.email          = contact.email;
+    $scope.company        = contact.company;
+    $scope.mobile_phone   = contact.phones[0].home;
+    $scope.home_phone     = contact.phones[0].mobile;
+    $scope.work_phone     = contact.phones[0].work;;
+    $scope.street_address = contact.address[0].street_address;
+    $scope.city           = contact.address[0].city;
+    $scope.state          = contact.address[0].state;
+    $scope.zipcode        = contact.address[0].zipcode;
+
+    $scope.contactShow = true;
+  }
+
   //Clear $scope Fields
 
   function clearFields(){
